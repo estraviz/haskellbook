@@ -37,7 +37,33 @@ foldBool' :: a -> a -> Bool -> a
 foldBool' x y b 
   | b == True  = x
   | b == False = y
+-- pattern matching version
+foldBool3 :: a -> a -> Bool -> a
+foldBool3 x _ False = x
+foldBool3 _ y True  = y
 
 -- 3.
+g :: (a -> b) -> (a, c) -> (b, c)
+g f (x, y) = (f x, y)
 
+g' :: (a -> b) -> (a, c) -> (b, c)
+g' f' z = (f' . fst $ z, snd z)
+
+-- 4.
+roundTrip :: (Show a, Read a) => a -> a
+roundTrip a = read (show a)
+
+-- 5. point-free version of roundTrip
+roundTrip' :: (Show a, Read a) => a -> a
+roundTrip' = read . show
+
+-- 6.
+roundTrip'' :: (Show a, Read b) => a -> b
+roundTrip'' = read . show
+
+main = do
+  print (roundTrip 4)
+  print (id 4)
+  print (roundTrip' 5 :: Int)
+  print (roundTrip'' 6 :: Int)
 
