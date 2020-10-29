@@ -3,7 +3,7 @@ module PoemLines where
 -- 1.
 myWords :: String -> [String]
 myWords [] = []
-myWords x  = [xs] ++ myWords x'
+myWords x  = [xs] ++ myWords x' 
   where xs = takeWhile (/= ' ') x
         x' = dropWhile (== ' ') . dropWhile (/= ' ') $ x
 
