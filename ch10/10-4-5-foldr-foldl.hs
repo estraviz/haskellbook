@@ -1,12 +1,12 @@
 module FoldRightAndLeft where
 
 
-foldr' :: (a -> b -> b) -> b -> [a] -> b
-foldr' f z []     = z
-foldr' f z (x:xs) = f x (foldr f z xs)
+myFoldr :: (a -> b -> b) -> b -> [a] -> b
+myFoldr f z []     = z
+myFoldr f z (x:xs) = f x (foldr f z xs)
 
-foldr'' :: (a -> b -> b) -> b -> [a] -> b
-foldr'' f z xs = case xs of []     -> z
+myFoldr' :: (a -> b -> b) -> b -> [a] -> b
+myFoldr' f z xs = case xs of []     -> z
                             (x:xs) -> f x (foldr f z xs)
 
 myAny :: (a -> Bool) -> [a] -> Bool
@@ -15,9 +15,9 @@ myAny f xs = foldr (\x b -> f x || b) False xs
 const' :: a -> b -> a
 const' x _ = x
 
-foldl' :: (b -> a -> b) -> b -> [a] -> b
-foldl' f acc []     = acc
-foldl' f acc (x:xs) = foldl f (f acc x) xs
+myFoldl :: (b -> a -> b) -> b -> [a] -> b
+myFoldl f acc []     = acc
+myFoldl f acc (x:xs) = foldl f (f acc x) xs
 
 
 main :: IO ()
