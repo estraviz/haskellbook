@@ -7,7 +7,7 @@ myFoldr f z (x:xs) = f x (foldr f z xs)
 
 myFoldr' :: (a -> b -> b) -> b -> [a] -> b
 myFoldr' f z xs = case xs of []     -> z
-                            (x:xs) -> f x (foldr f z xs)
+                             (x:xs) -> f x (foldr f z xs)
 
 myAny :: (a -> Bool) -> [a] -> Bool
 myAny f xs = foldr (\x b -> f x || b) False xs
