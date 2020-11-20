@@ -149,12 +149,40 @@ squishAgain = squishMap'' id
 
 -- 10. myMaximumBy
 myMaximumBy :: (a -> a -> Ordering) -> [a] -> a
-myMaximumBy = undefined
+myMaximumBy f [x]  = x
+myMaximumBy f (x:xs)
+  | f x y     == GT = x
+  | otherwise       = y
+  where y = myMaximumBy f xs
+
+myMaximumBy' :: (a -> a -> Ordering) -> [a] -> a
+myMaximumBy' f (x:xs) = foldl go x xs
+  where go x max = case (f x max) of GT -> x
+                                     EQ -> max
+                                     LT -> max
+
+myMaximumBy'' :: (a -> a -> Ordering) -> [a] -> a
+myMaximumBy'' f (x:xs) = foldl (\a b -> if f a b == GT then a else b) x xs
 
 -- 11. myMinimumBy
 myMinimumBy :: (a -> a -> Ordering) -> [a] -> a
-myMinimumBy = undefined
+myMinimumBy f [x]    = x
+myMinimumBy f (x:xs)
+  | f x y == LT = x
+  | otherwise   = y
+  where y = myMinimumBy f xs
 
+myMinimumBy' :: (a -> a -> Ordering) -> [a] -> a
+myMinimumBy' f (x:xs) = foldl go x xs
+  where go x min = case (f x min) of GT -> min
+                                     EQ -> min
+                                     LT -> x
+
+myMinimumBy'' :: (a -> a -> Ordering) -> [a] -> a
+myMinimumBy'' f (x:xs) = foldl (\a b -> if f a b == LT then a else b) x xs
+
+
+-- MAIN (results, for testing the implementations above)
 main = do
   print "## Warm up and review ##"
   print "-- 1."
@@ -229,10 +257,38 @@ main = do
   print "-- 9. squishAgain"
   print $ squishAgain aList == [1..6]
   print "-- 10. myMaximumBy"
-  print $ myMaximumBy (\_ _ -> GT) [1..10] == 1
-  print $ myMaximumBy (\_ _ -> LT) [1..10] == 10
-  print $ myMaximumBy compare [1..10] == 10
+  print $ myMaximumBy compare [1, 53, 9001, 10]       == 9001
+  print $ myMaximumBy compare [-1, -53, -9001, -10]   == -1
+  print $ myMaximumBy (\_ _ -> GT) [1..10]            == 1
+  print $ myMaximumBy (\_ _ -> LT) [1..10]            == 10
+  print $ myMaximumBy compare [1..10]                 == 10
+  print ""
+  print $ myMaximumBy' compare [1, 53, 9001, 10]      == 9001
+  print $ myMaximumBy' compare [-1, -53, -9001, -10]  == -1
+  print $ myMaximumBy' (\_ _ -> GT) [1..10]           == 1
+  print $ myMaximumBy' (\_ _ -> LT) [1..10]           == 10
+  print $ myMaximumBy' compare [1..10]                == 10
+  print ""
+  print $ myMaximumBy'' compare [1, 53, 9001, 10]     == 9001
+  print $ myMaximumBy'' compare [-1, -53, -9001, -10] == -1
+  print $ myMaximumBy'' (\_ _ -> GT) [1..10]          == 1
+  print $ myMaximumBy'' (\_ _ -> LT) [1..10]          == 10
+  print $ myMaximumBy'' compare [1..10]               == 10
   print "-- 11. myMinimumBy"
-  print $ myMinimumBy (\_ _ -> GT) [1..10] == 10
-  print $ myMinimumBy (\_ _ -> LT) [1..10] == 1
-  print $ myMinimumBy compare [1..10] == 1
+  print $ myMinimumBy compare [1, 53, 9001, 10]       == 1
+  print $ myMinimumBy compare [-1, -53, -9001, -10]   == -9001
+  print $ myMinimumBy (\_ _ -> GT) [1..10]            == 10
+  print $ myMinimumBy (\_ _ -> LT) [1..10]            == 1
+  print $ myMinimumBy compare [1..10]                 == 1
+  print ""
+  print $ myMinimumBy' compare [1, 53, 9001, 10]      == 1
+  print $ myMinimumBy' compare [-1, -53, -9001, -10]  == -9001
+  print $ myMinimumBy' (\_ _ -> GT) [1..10]           == 10
+  print $ myMinimumBy' (\_ _ -> LT) [1..10]           == 1
+  print $ myMinimumBy' compare [1..10]                == 1
+  print ""
+  print $ myMinimumBy'' compare [1, 53, 9001, 10]     == 1
+  print $ myMinimumBy'' compare [-1, -53, -9001, -10] == -9001
+  print $ myMinimumBy'' (\_ _ -> GT) [1..10]          == 10
+  print $ myMinimumBy'' (\_ _ -> LT) [1..10]          == 1
+  print $ myMinimumBy'' compare [1..10]               == 1
